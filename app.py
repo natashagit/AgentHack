@@ -3,11 +3,14 @@ import tempfile
 import asyncio
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import google.genai as genai
 from dotenv import load_dotenv
 from browser_use import Agent
 from langchain_openai import ChatOpenAI
 import time
+from pydantic import BaseModel
 
 # Load environment variables
 load_dotenv()
@@ -30,6 +33,16 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+class AutomationRequest(BaseModel):
+    description: str
+
+@app.get("/")
+async def read_root():
+    return FileResponse("static/index.html")
 
 def wait_for_file_processing(file):
     """Wait for file to be in ACTIVE state"""
@@ -206,6 +219,18 @@ async def process_video(video: UploadFile):
             
     except Exception as e:
         print("\n=== Unexpected Error ===")
+        print(f"Error type: {type(e)}")
+        print(f"Error details: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/start-automation")
+async def start_automation(request: AutomationRequest):
+    try:
+        print("\n=== Starting Browser Automation ===")
+        browser_result = await run_browser_agent(request.description)
+        return {"status": "success", "result": browser_result}
+    except Exception as e:
+        print("\n=== Automation Error ===")
         print(f"Error type: {type(e)}")
         print(f"Error details: {str(e)}")
         raise HTTPException(status_code=500, detail=str(e))
