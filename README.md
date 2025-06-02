@@ -1,4 +1,8 @@
-# Video Task Automation API
+# Building your very own agent
+
+Create your own agents to do repetitive tasks without writing a single line of code. Just upload a video of what you want it to do, and our AI will handle the rest!
+
+## Video Task Automation API
 
 This FastAPI application processes video recordings of tasks and uses Google's Gemini 2.5 Pro to generate step-by-step prompts for automation. The generated prompts are then executed using browser-use for task automation.
 
