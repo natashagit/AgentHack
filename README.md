@@ -7,6 +7,7 @@ Create your own agents to do repetitive tasks without writing a single line of c
 This FastAPI application processes video recordings of tasks and uses Google's Gemini 2.5 Pro to generate step-by-step prompts for automation. The generated prompts are then executed using browser-use for task automation.
 
 ![Working Prototype](AgentHack-gif.gif)
+
 [Visit the website](https://natashagit.github.io/AgentHack/)
 
 ## Prerequisites
