@@ -2,6 +2,8 @@
 
 This FastAPI application processes video recordings of tasks and uses Google's Gemini 2.5 Pro to generate step-by-step prompts for automation. The generated prompts are then executed using browser-use for task automation.
 
+[Visit the website](https://natashagit.github.io/AgentHack/)
+
 ## Prerequisites
 
 - Python 3.8 or higher
