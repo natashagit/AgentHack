@@ -1,9 +1,10 @@
 fastapi
 uvicorn
 python-multipart
-google-generativeai
+google-genai
 python-dotenv
-browser-use
+browser_use
 pydantic
 langchain-openai
 openai
+gunicorn
