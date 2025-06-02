@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Task Automation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        .drop-zone {
+            border: 2px dashed #4a5568;
+            transition: all 0.3s ease;
+        }
+        .drop-zone:hover {
+            border-color: #2d3748;
+            background-color: #f7fafc;
+        }
+        .drop-zone.dragover {
+            border-color: #4299e1;
+            background-color: #ebf8ff;
+        }
+        .progress-bar {
+            transition: width 0.3s ease;
+        }
+        .feature-card {
+            transition: transform 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .hero-gradient {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .section-gradient {
+            background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+        }
+        .card-gradient {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <!-- Hero Section -->
+    <div class="hero-gradient text-white">
+        <div class="container mx-auto px-4 py-16">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-5xl font-bold mb-6">Automate Your Digital Tasks</h1>
+                <p class="text-xl mb-8">Upload a video of any task you want to automate. Our AI will learn from it and create a custom agent to handle it for you.</p>
+                <div class="bg-white rounded-lg shadow-xl p-8 max-w-2xl mx-auto">
+                    <div id="upload-section" class="drop-zone rounded-lg p-8 text-center cursor-pointer">
+                        <div class="mb-4">
+                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                            </svg>
+                        </div>
+                        <p class="text-gray-600 mb-2">Drag and drop your video here</p>
+                        <p class="text-gray-500 text-sm mb-4">or</p>
+                        <input type="file" id="file-input" class="hidden" accept="video/*">
+                        <button onclick="document.getElementById('file-input').click()" class="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition">
+                            Choose File
+                        </button>
+                    </div>
+
+                    <!-- Upload Progress -->
+                    <div id="upload-progress" class="hidden mt-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm text-gray-600">Uploading...</span>
+                            <span id="upload-percentage" class="text-sm text-gray-600">0%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2">
+                            <div id="progress-bar" class="progress-bar bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                        </div>
+                    </div>
+
+                    <!-- Processing Status -->
+                    <div id="processing-status" class="hidden mt-4 text-center">
+                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto mb-2"></div>
+                        <p class="text-gray-600">Processing video...</p>
+                    </div>
+
+                    <!-- Results Section -->
+                    <div id="results-section" class="hidden mt-4">
+                        <div class="bg-white rounded-lg shadow-lg p-6">
+                            <h2 class="text-2xl font-semibold text-gray-800 mb-4">Results</h2>
+                            <div id="results-content" class="text-gray-600"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="container mx-auto px-4 py-16">
+        <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">How It Works</h2>
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div class="text-center">
+                <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">1. Record Your Task</h3>
+                <p class="text-gray-600">Record a video of yourself performing the task you want to automate.</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">2. Upload & Process</h3>
+                <p class="text-gray-600">Upload your video and let our AI analyze the steps and create an automation plan.</p>
+            </div>
+            <div class="text-center">
+                <div class="bg-blue-100 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-semibold mb-2">3. Run Automatically</h3>
+                <p class="text-gray-600">Your custom agent will now perform the task automatically whenever you need it.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Use Cases Section -->
+    <div class="section-gradient py-16">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center text-gray-800 mb-12">Popular Use Cases</h2>
+            <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+                <!-- Email Management -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden feature-card">
+                    <img src="https://images.unsplash.com/photo-1596526131083-e8c633c948d2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Email Management" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Smart Email Management</h3>
+                        <p class="text-gray-600">Skims headlines, newsletters, and unread emails; bubbles up the handful you'll actually care about.</p>
+                    </div>
+                </div>
+
+                <!-- Grocery Shopping -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden feature-card">
+                    <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Grocery Shopping" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Automated Grocery Shopping</h3>
+                        <p class="text-gray-600">Order your monthly staples automatically. Just show it once, and it'll handle the rest.</p>
+                    </div>
+                </div>
+
+                <!-- Event Discovery -->
+                <div class="bg-white rounded-lg shadow-lg overflow-hidden feature-card">
+                    <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60" alt="Event Discovery" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold mb-2">Event Discovery</h3>
+                        <p class="text-gray-600">Search for events going on around you in the next week and get personalized recommendations.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- No Coding Required Section -->
+    <div class="container mx-auto px-4 py-16">
+        <div class="max-w-4xl mx-auto text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">No Coding Required</h2>
+            <p class="text-xl text-gray-600 mb-8">
+                Create your own agents to do repetitive tasks without writing a single line of code. 
+                Just upload a video of what you want it to do, and our AI will handle the rest.
+            </p>
+            <div class="card-gradient rounded-lg p-8">
+                <div class="flex items-center justify-center space-x-4">
+                    <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                    </svg>
+                    <p class="text-lg text-gray-700">
+                        "The future of automation is here. Just show it once, and it'll do it forever."
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('upload-section');
+        const fileInput = document.getElementById('file-input');
+        const uploadProgress = document.getElementById('upload-progress');
+        const progressBar = document.getElementById('progress-bar');
+        const uploadPercentage = document.getElementById('upload-percentage');
+        const processingStatus = document.getElementById('processing-status');
+        const resultsSection = document.getElementById('results-section');
+        const resultsContent = document.getElementById('results-content');
+
+        // Drag and drop handlers
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            dropZone.classList.add('dragover');
+        }
+
+        function unhighlight(e) {
+            dropZone.classList.remove('dragover');
+        }
+
+        dropZone.addEventListener('drop', handleDrop, false);
+        fileInput.addEventListener('change', handleFileSelect, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            handleFiles(files);
+        }
+
+        function handleFileSelect(e) {
+            const files = e.target.files;
+            handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            if (files.length > 0) {
+                uploadFile(files[0]);
+            }
+        }
+
+        async function uploadFile(file) {
+            const formData = new FormData();
+            formData.append('video', file);
+
+            // Show upload progress
+            uploadProgress.classList.remove('hidden');
+            dropZone.classList.add('hidden');
+
+            try {
+                const response = await fetch('/process-video', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    // Show processing status
+                    uploadProgress.classList.add('hidden');
+                    processingStatus.classList.remove('hidden');
+
+                    // After processing is complete
+                    processingStatus.classList.add('hidden');
+                    resultsSection.classList.remove('hidden');
+                    resultsContent.textContent = JSON.stringify(data, null, 2);
+                } else {
+                    throw new Error('Upload failed');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Upload failed. Please try again.');
+                resetUI();
+            }
+        }
+
+        function resetUI() {
+            uploadProgress.classList.add('hidden');
+            processingStatus.classList.add('hidden');
+            resultsSection.classList.add('hidden');
+            dropZone.classList.remove('hidden');
+            progressBar.style.width = '0%';
+            uploadPercentage.textContent = '0%';
+        }
+    </script>
+</body>
+</html> 
